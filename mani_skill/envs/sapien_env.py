@@ -203,7 +203,6 @@ class BaseEnv(gym.Env):
         enhanced_determinism: bool = False,
     ):
         self._enhanced_determinism = enhanced_determinism
-
         self.num_envs = num_envs
         self.reconfiguration_freq = reconfiguration_freq if reconfiguration_freq is not None else 0
         self._reconfig_counter = 0
@@ -490,9 +489,13 @@ class BaseEnv(gym.Env):
             obs = common.flatten_state_dict(state_dict, use_torch=True, device=self.device)
         elif self._obs_mode == "state_dict":
             obs = self._get_obs_state_dict(info)
-        elif self._obs_mode == "pointcloud":
+            
+        elif self._obs_mode == "pointcloud": # for lift3d
             obs = self._get_obs_with_sensor_data(info)
-            obs = sensor_data_to_pointcloud(obs, self._sensors)
+            cl = obs.copy()
+            pcd = sensor_data_to_pointcloud(cl, self._sensors)["pointcloud"]
+            obs["pointcloud"] = pcd
+            
         elif self._obs_mode == "sensor_data":
             # return raw texture data dependent on choice of shader
             obs = self._get_obs_with_sensor_data(info, apply_texture_transforms=False)
@@ -504,6 +507,8 @@ class BaseEnv(gym.Env):
             if isinstance(obs, dict):
                 data = dict(agent=obs.pop("agent"), extra=obs.pop("extra"))
                 obs["state"] = common.flatten_state_dict(data, use_torch=True, device=self.device)
+                
+        
         return obs
 
     def _get_obs_state_dict(self, info: Dict):

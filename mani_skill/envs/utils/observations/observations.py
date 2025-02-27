@@ -39,6 +39,7 @@ def sensor_data_to_pointcloud(observation: Dict, sensors: Dict[str, BaseSensor])
 
             # Convert to world space
             cam2world = camera_params[cam_uid]["cam2world_gl"]
+            cam2world = cam2world.to(position.device)
             xyzw = torch.cat([position, segmentation != 0], dim=-1).reshape(
                 position.shape[0], -1, 4
             ) @ cam2world.transpose(1, 2)
@@ -54,8 +55,8 @@ def sensor_data_to_pointcloud(observation: Dict, sensors: Dict[str, BaseSensor])
                 )
 
             pointcloud_obs[cam_uid] = cam_pcd
-    for k in pointcloud_obs.keys():
-        del observation["sensor_data"][k]
+    # for k in pointcloud_obs.keys():
+    #     del observation["sensor_data"][k]
     pointcloud_obs = common.merge_dicts(pointcloud_obs.values())
     for key, value in pointcloud_obs.items():
         pointcloud_obs[key] = torch.concat(value, axis=1)

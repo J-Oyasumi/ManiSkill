@@ -6,7 +6,7 @@ import torch
 import torch.random
 from transforms3d.euler import euler2quat
 
-from mani_skill.agents.robots import Fetch, Panda
+from mani_skill.agents.robots import Fetch, Panda, PandaWristCam
 from mani_skill.envs.sapien_env import BaseEnv
 from mani_skill.sensors.camera import CameraConfig
 from mani_skill.utils.building import actors
@@ -32,8 +32,8 @@ class LiftPegUprightEnv(BaseEnv):
     """
 
     _sample_video_link = "https://github.com/haosulab/ManiSkill/raw/main/figures/environment_demos/LiftPegUpright-v1_rt.mp4"
-    SUPPORTED_ROBOTS = ["panda", "fetch"]
-    agent: Union[Panda, Fetch]
+    SUPPORTED_ROBOTS = ["panda", "fetch", "panda_wristcam"]
+    agent: Union[Panda, Fetch, PandaWristCam]
 
     peg_half_width = 0.025
     peg_half_length = 0.12
@@ -44,8 +44,8 @@ class LiftPegUprightEnv(BaseEnv):
 
     @property
     def _default_sensor_configs(self):
-        pose = look_at(eye=[0.3, 0, 0.6], target=[-0.1, 0, 0.1])
-        return [CameraConfig("base_camera", pose, 128, 128, np.pi / 2, 0.01, 100)]
+        pose = look_at(eye=[0.6, 0.6, 0.6], target=[0, 0, 0.35])
+        return [CameraConfig("base_camera", pose, 480, 480, 1, 0.01, 100)]
 
     @property
     def _default_human_render_camera_configs(self):

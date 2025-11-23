@@ -8,7 +8,7 @@ import torch
 import torch.random
 from transforms3d.euler import euler2quat
 
-from mani_skill.agents.robots import Fetch, Panda
+from mani_skill.agents.robots import Fetch, Panda, PandaWristCam
 from mani_skill.envs.sapien_env import BaseEnv
 from mani_skill.envs.utils import randomization
 from mani_skill.sensors.camera import CameraConfig
@@ -35,10 +35,10 @@ class PlaceSphereEnv(BaseEnv):
     """
 
     _sample_video_link = "https://github.com/haosulab/ManiSkill/raw/main/figures/environment_demos/PlaceSphere-v1_rt.mp4"
-    SUPPORTED_ROBOTS = ["panda", "fetch"]
+    SUPPORTED_ROBOTS = ["panda", "fetch", "panda_wristcam"]
 
     # Specify some supported robot types
-    agent: Union[Panda, Fetch]
+    agent: Union[Panda, Fetch, PandaWristCam]
 
     # set some commonly used values
     radius = 0.02  # radius of the sphere
@@ -69,14 +69,14 @@ class PlaceSphereEnv(BaseEnv):
 
     @property
     def _default_sensor_configs(self):
-        pose = sapien_utils.look_at(eye=[0.3, 0, 0.2], target=[-0.1, 0, 0])
+        pose = sapien_utils.look_at(eye=[0.6, -0.6, 0.6], target=[0.0, 0.0, 0.35])
         return [
             CameraConfig(
                 "base_camera",
                 pose=pose,
-                width=128,
-                height=128,
-                fov=np.pi / 2,
+                width=480,
+                height=480,
+                fov=1,
                 near=0.01,
                 far=100,
             )

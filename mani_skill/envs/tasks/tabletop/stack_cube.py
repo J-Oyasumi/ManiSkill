@@ -4,7 +4,7 @@ import numpy as np
 import sapien
 import torch
 
-from mani_skill.agents.robots import Fetch, Panda
+from mani_skill.agents.robots import Fetch, Panda, PandaWristCam
 from mani_skill.envs.sapien_env import BaseEnv
 from mani_skill.envs.utils import randomization
 from mani_skill.sensors.camera import CameraConfig
@@ -36,15 +36,15 @@ class StackCubeEnv(BaseEnv):
     agent: Union[Panda, Fetch]
 
     def __init__(
-        self, *args, robot_uids="panda_wristcam", robot_init_qpos_noise=0.02, **kwargs
+        self, *args, robot_uids="panda", robot_init_qpos_noise=0.02, **kwargs
     ):
         self.robot_init_qpos_noise = robot_init_qpos_noise
         super().__init__(*args, robot_uids=robot_uids, **kwargs)
 
     @property
     def _default_sensor_configs(self):
-        pose = sapien_utils.look_at(eye=[0.3, 0, 0.6], target=[-0.1, 0, 0.1])
-        return [CameraConfig("base_camera", pose, 128, 128, np.pi / 2, 0.01, 100)]
+        pose = sapien_utils.look_at(eye=[0.6, -0.6, 0.6], target=[0, 0, 0.35])
+        return [CameraConfig("base_camera", pose, 480, 480, 1, 0.01, 100)]
 
     @property
     def _default_human_render_camera_configs(self):

@@ -11,7 +11,7 @@ Reconfiguration will reset the entire environment scene and allow you to load/sw
 
 Episode initialization will reset the positions of all objects (called actors), articulations, and agents,
 in addition to initializing any task relevant data like a goal
-
+s
 See comments for how to make your own environment and what each required function should do
 """
 

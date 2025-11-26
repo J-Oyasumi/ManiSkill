@@ -69,7 +69,7 @@ class PlaceSphereEnv(BaseEnv):
 
     @property
     def _default_sensor_configs(self):
-        pose = sapien_utils.look_at(eye=[0.6, -0.6, 0.6], target=[0.0, 0.0, 0.35])
+        pose = sapien_utils.look_at(eye=[0.6, 0.6, 0.6], target=[0.0, 0.0, 0.35])
         return [
             CameraConfig(
                 "base_camera",
